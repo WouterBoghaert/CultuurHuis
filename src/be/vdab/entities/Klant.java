@@ -20,29 +20,56 @@ public class Klant {
 		if (IntLongUtils.isStrictPositief(id)) {
 			this.id = id;
 		}
+		else {
+			throw new IllegalArgumentException();
+		}
 		if (StringUtils.isNotEmpty(voornaam)) {
 			this.voornaam = voornaam;
+		}
+		else {
+			throw new IllegalArgumentException();
 		}
 		if (StringUtils.isNotEmpty(familienaam)) {
 			this.familienaam = familienaam;
 		}
+		else {
+			throw new IllegalArgumentException();
+		}
 		if (StringUtils.isNotEmpty(straat)) {
 			this.straat = straat;
+		}
+		else {
+			throw new IllegalArgumentException();
 		}
 		if (StringUtils.isNotEmpty(huisnr)) {
 			this.huisnr = huisnr;
 		}
+		else {
+			throw new IllegalArgumentException();
+		}
 		if (StringUtils.isNotEmpty(postcode)) {
 			this.postcode = postcode;
+		}
+		else {
+			throw new IllegalArgumentException();
 		}
 		if (StringUtils.isNotEmpty(gemeente)) {
 			this.gemeente = gemeente;
 		}
+		else {
+			throw new IllegalArgumentException();
+		}
 		if (StringUtils.isNotEmpty(gebruikersnaam)) {
 			this.gebruikersnaam = gebruikersnaam;
 		}
+		else {
+			throw new IllegalArgumentException();
+		}
 		if (StringUtils.isNotEmpty(paswoord)) {
 			this.paswoord = paswoord;
+		}
+		else {
+			throw new IllegalArgumentException();
 		}
 	}
 
