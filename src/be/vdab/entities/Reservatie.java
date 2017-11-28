@@ -18,8 +18,18 @@ public class Reservatie implements Serializable {
 		else {
 			throw new IllegalArgumentException();
 		}
-		this.klant = klant;
-		this.voorstelling = voorstelling;
+		if(klant != null) {
+			this.klant = klant;
+		}
+		else {
+			throw new IllegalArgumentException();
+		}
+		if(voorstelling != null) {
+			this.voorstelling = voorstelling;
+		}
+		else {
+			throw new IllegalArgumentException();
+		}
 		if (IntLongUtils.isStrictPositief(aantalPlaatsen)) {
 			this.aantalPlaatsen = aantalPlaatsen;
 		}

@@ -35,8 +35,18 @@ public class Voorstelling {
 		else {
 			throw new IllegalArgumentException();
 		}
-		this.datum = datum;
-		this.genre = genre;
+		if (datum != null) {
+			this.datum = datum;
+		}
+		else {
+			throw new IllegalArgumentException();
+		}
+		if (genre != null) {
+			this.genre = genre;
+		}
+		else {
+			throw new IllegalArgumentException();
+		}
 		if(prijs.compareTo(BigDecimal.ZERO) > 0) {
 			this.prijs = prijs;
 		}
