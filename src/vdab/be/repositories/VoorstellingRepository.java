@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import be.vdab.entities.Genre;
@@ -17,7 +19,7 @@ public class VoorstellingRepository extends AbstractRepository {
 		+ "from voorstellingen inner join genres on genres.id = voorstellingen.genreid ";
 	private static final String SELECT_ALL_GENRE = 
 		BEGIN_SELECT
-		+ "where genreid = ? && datum >= {fn now()} order by datum";
+		+ "where genreid = ? && datum >= {fn now()} order by datum, id";
 	private static final String SELECT_BY_ID = 
 		BEGIN_SELECT
 		+ "where voorstellingen.id = ?";
@@ -27,10 +29,6 @@ public class VoorstellingRepository extends AbstractRepository {
 	private static final String VRIJEPLAATSEN_VERMINDEREN = 
 		"update voorstellingen set vrijeplaatsen = vrijeplaatsen - ? "
 		+ "where id = ?";
-	
-	// enkel selectie van voorstellingen  (datum < systeemdatum)!!! nodig bij genres
-	//bij vrije plaatsen verminderen opnieuw checken of plaatsen beschikbaar zijn 
-	//en resultaat doorgeven met boolean, plaatsen en Voorstelling nodig
 	
 	private Voorstelling resultSetNaarVoorstelling(ResultSet resultSet) throws SQLException {
 		return new Voorstelling.VoorstellingBuilder()
@@ -60,6 +58,84 @@ public class VoorstellingRepository extends AbstractRepository {
 			return voorstellingen;
 		}
 		catch (SQLException ex) {
+			throw new RepositoryException(ex);
+		}
+	}
+	
+	public Optional<Voorstelling> selectById(long id) {
+		try(Connection connection = dataSource.getConnection();
+			PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
+			Optional<Voorstelling> voorstelling;
+			connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+			connection.setAutoCommit(false);
+			statement.setInt(1, (int) id);
+			try(ResultSet resultSet = statement.executeQuery()) {
+				if(resultSet.next()) {
+					voorstelling = Optional.of(resultSetNaarVoorstelling(resultSet));
+				}
+				else {
+					voorstelling = Optional.empty();
+				}
+			}
+			connection.commit();
+			return voorstelling;
+		}
+		catch(SQLException ex) {
+			throw new RepositoryException(ex);
+		}
+	}
+	
+	public Set<Voorstelling> selectByIds(List<Long> ids) {
+		StringBuilder selectBuilder = new StringBuilder();
+		selectBuilder.append(SELECT_BY_IDS);
+		ids.stream().forEach(id -> selectBuilder.append("?,"));
+		selectBuilder.setCharAt(selectBuilder.length() - 1, ')');
+		selectBuilder.append(" order by datum, id");
+		try(Connection connection = dataSource.getConnection();
+			PreparedStatement statement = connection.prepareStatement(selectBuilder.toString())) {
+			Set<Voorstelling> voorstellingen = new LinkedHashSet<>();
+			connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+			connection.setAutoCommit(false);
+			int index = 0;
+			for (long id : ids) {
+				statement.setInt(++index, (int) id);
+			}
+			try(ResultSet resultSet = statement.executeQuery()) {
+				while(resultSet.next()) {
+					voorstellingen.add(resultSetNaarVoorstelling(resultSet));
+				}
+			}
+			connection.commit();
+			return voorstellingen;
+		}
+		catch(SQLException ex) {
+			throw new RepositoryException(ex);
+		}	
+	}
+	
+	public boolean vrijePlaatsenVerminderen(long id, int aantalPlaatsen) {
+		try(Connection connection = dataSource.getConnection();
+			PreparedStatement statementSelect = connection.prepareStatement(SELECT_BY_ID);
+			PreparedStatement statementUpdate = connection.prepareStatement(VRIJEPLAATSEN_VERMINDEREN)) {
+			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			connection.setAutoCommit(false);
+			statementSelect.setInt(1, (int) id);
+			try(ResultSet resultSet = statementSelect.executeQuery()) {
+				if(resultSet.next()) {
+					if(aantalPlaatsen <= resultSet.getInt("vrijeplaatsen")) {
+						statementUpdate.setInt(1, aantalPlaatsen);
+						statementUpdate.setInt(2, (int) id);
+						statementUpdate.executeUpdate();
+					}
+					else {
+						return false;
+					}
+				}
+			}
+			connection.commit();
+			return true;
+		}
+		catch(SQLException ex) {
 			throw new RepositoryException(ex);
 		}
 	}
