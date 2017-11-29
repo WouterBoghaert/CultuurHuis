@@ -42,13 +42,13 @@ public class VoorstellingRepository extends AbstractRepository {
 				.maakVoorstelling();
 	}
 	
-	public Set<Voorstelling> toonAlleVoorGenre(Genre genre) {
+	public Set<Voorstelling> toonAlleVoorGenre(long genreId) {
 		try(Connection connection = dataSource.getConnection();
 			PreparedStatement statement = connection.prepareStatement(SELECT_ALL_GENRE)) {
 			Set<Voorstelling> voorstellingen = new LinkedHashSet<>();
 			connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 			connection.setAutoCommit(false);
-			statement.setInt(1, (int)(genre.getId()));
+			statement.setInt(1, (int)(genreId));
 			try(ResultSet resultSet = statement.executeQuery()) {
 				while(resultSet.next()) {
 					voorstellingen.add(resultSetNaarVoorstelling(resultSet));
