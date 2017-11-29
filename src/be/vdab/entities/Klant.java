@@ -109,11 +109,46 @@ public class Klant {
 		return paswoord;
 	}
 	
+	public void setId(long id) {
+		if (IntLongUtils.isStrictPositief(id)) {
+			this.id = id;
+		}
+		else {
+			throw new IllegalArgumentException();
+		}
+	}
+	
 	@Override
 	public String toString() {
 		return voornaam + " " + familienaam + " " + straat + " " + huisnr + " " + postcode + " " + gemeente;
 	}
 	
+	
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Klant other = (Klant) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+
+
+
 	public static class KlantBuilder {
 		private long id;
 		private String voornaam;

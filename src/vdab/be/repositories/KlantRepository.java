@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Optional;
 
 import be.vdab.entities.Klant;
@@ -22,7 +23,7 @@ public class KlantRepository extends AbstractRepository {
 		+ "gemeente, gebruikersnaam, paswoord) values (?,?,?,?,?,?,?,?)";
 
 	private Klant resultSetRijNaarKlant(ResultSet resultSet) throws SQLException {
-		return new Klant.KlantBuilder().metId(resultSet.getLong("id"))
+		return new Klant.KlantBuilder().metId((long)(resultSet.getInt("id")))
 				.metVoornaam(resultSet.getString("voornaam"))
 				.metFamilienaam(resultSet.getString("familienaam"))
 				.metStraat(resultSet.getString("straat"))
@@ -63,7 +64,7 @@ public class KlantRepository extends AbstractRepository {
 			Optional<Klant> klant;
 			connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 			connection.setAutoCommit(false);
-			statement.setLong(1, id);
+			statement.setInt(1, (int) id);
 			try(ResultSet resultSet = statement.executeQuery()) {
 				if(resultSet.next()) {
 					klant = Optional.of(resultSetRijNaarKlant(resultSet));
@@ -84,12 +85,12 @@ public class KlantRepository extends AbstractRepository {
 	public boolean klantToevoegen(Klant klant) {
 		try(Connection connection = dataSource.getConnection();
 			PreparedStatement statementSelect = connection.prepareStatement(SELECT_BY_GEBRUIKERSNAAM);
-			PreparedStatement statementInsert = connection.prepareStatement(KLANT_TOEVOEGEN)) {
+			PreparedStatement statementInsert = connection.prepareStatement(KLANT_TOEVOEGEN, Statement.RETURN_GENERATED_KEYS)) {
 			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			connection.setAutoCommit(false);
 			statementSelect.setString(1, klant.getGebruikersnaam());
-			try (ResultSet resultSet = statementSelect.executeQuery()) {
-				if (resultSet.next()) {
+			try (ResultSet resultSetSelect = statementSelect.executeQuery()) {
+				if (resultSetSelect.next()) {
 					return false;
 				}
 				else {
@@ -102,6 +103,10 @@ public class KlantRepository extends AbstractRepository {
 					statementInsert.setString(7, klant.getGebruikersnaam());
 					statementInsert.setString(8, klant.getPaswoord());
 					statementInsert.executeUpdate();
+					try(ResultSet resultSetInsert = statementInsert.getGeneratedKeys()) {
+						resultSetInsert.next();
+						klant.setId((long)(resultSetInsert.getInt("id")));
+					}
 				}
 			}
 			connection.commit();
