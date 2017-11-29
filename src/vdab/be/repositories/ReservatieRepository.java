@@ -19,8 +19,8 @@ public class ReservatieRepository extends AbstractRepository {
 			Statement.RETURN_GENERATED_KEYS)) {
 			connection.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			connection.setAutoCommit(false);
-			statement.setInt(1, (int)(reservatie.getKlant().getId()));
-			statement.setInt(2, (int)(reservatie.getVoorstelling().getId()));
+			statement.setInt(1, (int)(reservatie.getKlantId()));
+			statement.setInt(2, (int)(reservatie.getVoorstellingId()));
 			statement.setInt(3, reservatie.getAantalPlaatsen());
 			statement.executeUpdate();
 			try(ResultSet resultSet = statement.getGeneratedKeys()) {

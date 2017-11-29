@@ -7,25 +7,39 @@ import be.vdab.util.IntLongUtils;
 public class Reservatie implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private long id;
-	private Klant klant;
-	private Voorstelling voorstelling;
+//	private Klant klant;
+//	private Voorstelling voorstelling;
+	private long klantId;
+	private long voorstellingId;
 	private int aantalPlaatsen;
 	
-	public Reservatie(long id, Klant klant, Voorstelling voorstelling, int aantalPlaatsen) {
+	public Reservatie(long id, long klantId, long voorstellingId, int aantalPlaatsen) {
 		if (IntLongUtils.isStrictPositief(id)) {
 			this.id = id;
 		}
 		else {
 			throw new IllegalArgumentException();
 		}
-		if(klant != null) {
-			this.klant = klant;
+//		if(klant != null) {
+//			this.klant = klant;
+//		}
+//		else {
+//			throw new IllegalArgumentException();
+//		}
+//		if(voorstelling != null) {
+//			this.voorstelling = voorstelling;
+//		}
+//		else {
+//			throw new IllegalArgumentException();
+//		}
+		if (IntLongUtils.isStrictPositief(klantId)) {
+			this.klantId = klantId;
 		}
 		else {
 			throw new IllegalArgumentException();
 		}
-		if(voorstelling != null) {
-			this.voorstelling = voorstelling;
+		if (IntLongUtils.isStrictPositief(voorstellingId)) {
+			this.voorstellingId = voorstellingId;
 		}
 		else {
 			throw new IllegalArgumentException();
@@ -42,12 +56,20 @@ public class Reservatie implements Serializable {
 		return id;
 	}
 
-	public Klant getKlant() {
+	/*public Klant getKlant() {
 		return klant;
 	}
 
 	public Voorstelling getVoorstelling() {
 		return voorstelling;
+	}*/
+	
+	public long getKlantId() {
+		return klantId;
+	}
+	
+	public long getVoorstellingId() {
+		return voorstellingId;
 	}
 
 	public int getAantalPlaatsen() {
