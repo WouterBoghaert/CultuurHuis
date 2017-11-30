@@ -85,7 +85,7 @@ public class VoorstellingRepository extends AbstractRepository {
 		}
 	}
 	
-	public Set<Voorstelling> selectByIds(List<Long> ids) {
+	public Set<Voorstelling> selectByIds(Set<Long> ids) {
 		StringBuilder selectBuilder = new StringBuilder();
 		selectBuilder.append(SELECT_BY_IDS);
 		ids.stream().forEach(id -> selectBuilder.append("?,"));

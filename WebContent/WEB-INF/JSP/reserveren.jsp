@@ -8,7 +8,7 @@
 	<vdab:head title="Reserveren"/>
 </head>
 <body>
-	<h1>Het Cultuurhuis: reserveren</h1>
+	<h2>Het Cultuurhuis: reserveren</h2><img src="<c:url value="/images/reserveren.png"/>" alt="Reserveren" title="Reserveren"/>
 	<div><vdab:menu/></div>
 	<div>
 		<dl>
@@ -18,16 +18,27 @@
 			<dd>${voorstelling.uitvoerders}</dd>
 			<dt>Datum:</dt>
 			<fmt:parseDate value="${voorstelling.datum}" pattern="yyyy-MM-dd'T'HH:mm" var="datum" type="both"/>
-			<dd><fmt:formatDate value="${datum}" type="both" dateStyle="short" timeStyle="short" pattern="dd/MM/yyyy HH:mm"/></dd>
+			<dd><fmt:formatDate value="${datum}" type="both" dateStyle="short" timeStyle="short" pattern="dd/MM/yy HH:mm"/></dd>
 			<dt>Prijs:</dt>
 			<dd>&euro;<fmt:formatNumber value="${voorstelling.prijs}" minFractionDigits="2" maxFractionDigits="2"/></dd>
 			<dt>Vrije plaatsen:</dt>
 			<dd>${voorstelling.aantalVrijePlaatsen}</dd>
 		</dl>
-		<form method = "post">
+		<c:url value="/reserveren.htm" var="actionURL" >
+			<c:param name="vrijePlaatsen" value="${voorstelling.aantalVrijePlaatsen}"/>
+			<c:param name="voorstellingId" value="${voorstelling.id}"/>
+		</c:url>
+		<form method = "post" name="reserveerForm" id="reserveerForm" action="${actionURL}">
 			<label for="plaatsen">Plaatsen:<span>${fout}</span></label>
-			<input type="number" min="1" max="${voorstelling.aantalVrijePlaatsen}" name="plaatsen" id="plaatsen" value="${reservatiemandje[voorstelling.id]}" required>
+ 			<input type="number" min="1" max="${voorstelling.aantalVrijePlaatsen}" name="plaatsen" id="plaatsen" value="${reservatiemandje[voorstelling.id]}" required>
+			<input type="submit" value="Reserveren" name="reserveerKnop" id="reserveerKnop">
 		</form>
 	</div>
+	<script>
+		document.getElementById("reserveerForm").addEventListener("submit", function(){
+			document.getElementById("reserveerKnop").disabled;
+			document.getElementById("plaatsen").disabled;
+		});
+	</script>
 </body>
 </html>

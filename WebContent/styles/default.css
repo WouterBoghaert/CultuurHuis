@@ -62,6 +62,12 @@ input[type='checkbox'] {
 	display: inline;
 }
 
+table input[type='submit'] {
+	display: block;
+	margin: 0.2em;
+	font-size: 1em;
+}
+
 nav ul {
 	background-color: red;
 	padding: 0.4em 0;
@@ -115,20 +121,14 @@ img {
 	margin: 0 1em;
 }
 
-table tr:nth-child(odd) {
+table tr:nth-child(even) {
 	background-color: #F2F2E4;
 }
 
-table tr:nth-child(even) {
+table tr:nth-child(odd) {
 	background-color: #E6E6C8;
 }
 
-td {
+td, th {
 	margin: 0.1em;
-	color: red;
-}
-
-th {
-	margin 0.1em;
-	color: red;
 }

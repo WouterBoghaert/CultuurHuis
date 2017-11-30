@@ -44,7 +44,7 @@
 			</c:if>
 			<fmt:parseDate value="${voorstelling.datum}" pattern="yyyy-MM-dd'T'HH:mm" var="datum" type="both"/>
 			<tr>
-				<td><fmt:formatDate value="${datum}" type="both" dateStyle="short" timeStyle="short" pattern="dd/MM/yyyy HH:mm"/></td>
+				<td><fmt:formatDate value="${datum}" type="both" dateStyle="short" timeStyle="short" pattern="dd/MM/yy HH:mm"/></td>
 				<td>${voorstelling.titel}</td>
 				<td>${voorstelling.uitvoerders}</td>
 				<td>&euro;<fmt:formatNumber value="${voorstelling.prijs}" minFractionDigits="2" maxFractionDigits="2"/></td>

@@ -33,32 +33,44 @@ public class ReserveerServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(StringUtils.isNotEmpty(request.getParameter("voorstellingId")) && StringUtils.isLong(request.getParameter("voorstellingId"))) {
-			request.setAttribute("voorstelling", voorstellingRepository.selectById(Long.parseLong(request.getParameter("voorstellingId"))).orElse(null));;
+			request.setAttribute("voorstelling", voorstellingRepository.selectById(Long.parseLong(request.getParameter("voorstellingId"))).orElse(null));
 		}
 		request.getRequestDispatcher(VIEW).forward(request,response);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(StringUtils.isNotEmpty(request.getParameter("plaatsen")) && StringUtils.isInt(request.getParameter("plaatsen"))) {
 			if(StringUtils.isNotEmpty(request.getParameter("vrijePlaatsen")) && StringUtils.isInt(request.getParameter("vrijePlaatsen"))) {
-				if(Integer.parseInt(request.getParameter("plaatsen")) >= Integer.parseInt(request.getParameter("vrijePlaatsen"))) {
+				if(Integer.parseInt(request.getParameter("plaatsen")) <= Integer.parseInt(request.getParameter("vrijePlaatsen"))) {
 					HttpSession session = request.getSession();
-					Map<Long,Integer> reservatiemandje = new LinkedHashMap<>();
+					Map<Long,Integer> reservatiemandje;
+					if (session.getAttribute("reservatiemandje") != null) {
+						reservatiemandje = (Map<Long,Integer>)session.getAttribute("reservatiemandje");
+					}
+					else {
+						reservatiemandje = new LinkedHashMap<>();
+					}
 					reservatiemandje.put(Long.parseLong(request.getParameter("voorstellingId")),Integer.parseInt(request.getParameter("plaatsen")));
 					session.setAttribute("reservatiemandje", reservatiemandje);
-					response.sendRedirect(request.getRequestURI() + REDIRECT_URL);
+					response.sendRedirect(request.getContextPath() + REDIRECT_URL);
 				}
 				else {
 					String fout = "Tik een getal tussen 1 en " + request.getParameter("vrijePlaatsen");
 					request.setAttribute("fout", fout);
+					request.setAttribute("voorstelling", voorstellingRepository.selectById(Long.parseLong(request.getParameter("voorstellingId"))).orElse(null));
 					request.getRequestDispatcher(VIEW).forward(request,response);
 				}
 			}
 		}
 		else {
+			request.setAttribute("voorstelling", voorstellingRepository.selectById(Long.parseLong(request.getParameter("voorstellingId"))).orElse(null));
 			request.setAttribute("fout", "Plaatsen moet correct ingevuld zijn!");
 			request.getRequestDispatcher(VIEW).forward(request,response);
 		}
 	}
 }
+
+// dopost misschien nog wat mooier schrijven, indien mogelijk
+// checken of response.sendRedirect(request.getRequestURI()); ipv dispatcher niet werkt
