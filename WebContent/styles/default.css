@@ -114,3 +114,21 @@ img {
 	display: inline-block;
 	margin: 0 1em;
 }
+
+table tr:nth-child(odd) {
+	background-color: #F2F2E4;
+}
+
+table tr:nth-child(even) {
+	background-color: #E6E6C8;
+}
+
+td {
+	margin: 0.1em;
+	color: red;
+}
+
+th {
+	margin 0.1em;
+	color: red;
+}

@@ -1,4 +1,4 @@
-<%@page contentType='text/html' pageEncoding='UTF-8' session='false'%>
+<%@page contentType='text/html' pageEncoding='UTF-8'%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="vdab" uri="http://vdab.be/tags" %>
@@ -17,6 +17,9 @@
 	
 	<div>
 	<h2>Het Cultuurhuis: voorstellingen</h2><img src="<c:url value="/images/voorstellingen.png"/>" alt="Voorstellingen" title="Voorstellingen"/>
+	</div>
+	<div>
+		<vdab:menu/>
 	</div>
 	<h3>Genres</h3>
 	<c:forEach var="genre" items="${genres}">
@@ -39,12 +42,12 @@
 						<th>Reserveren</th>
 					</tr>
 			</c:if>
-			<fmt:parseDate value="${voorstelling.datum}" pattern="yyyy-MM-dd HH:mm" var="datum" type="both"/>
+			<fmt:parseDate value="${voorstelling.datum}" pattern="yyyy-MM-dd'T'HH:mm" var="datum" type="both"/>
 			<tr>
-				<td><fmt:formatDate value="${datum}" dateStyle="short" timeStyle="short"/></td>
+				<td><fmt:formatDate value="${datum}" type="both" dateStyle="short" timeStyle="short" pattern="dd/MM/yyyy HH:mm"/></td>
 				<td>${voorstelling.titel}</td>
 				<td>${voorstelling.uitvoerders}</td>
-				<td>&euro;<fmt:formatNumber value="${voorstelling.prijs}"/></td>
+				<td>&euro;<fmt:formatNumber value="${voorstelling.prijs}" minFractionDigits="2" maxFractionDigits="2"/></td>
 				<td>${voorstelling.aantalVrijePlaatsen}</td>
 				<td><c:if test="${voorstelling.aantalVrijePlaatsen > 0}">
 						<c:url value="/reserveren.htm" var="reserverenURL">
@@ -62,6 +65,4 @@
 </body>
 </html>
 
-<!-- Checken voor parsen van datum, juiste patroon opzoeken
-	checken voor css tabel
-	prijs decimalen formatten -->
+<!-- checken voor css tabel -->

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import be.vdab.util.StringUtils;
 import vdab.be.repositories.GenreRepository;
 import vdab.be.repositories.VoorstellingRepository;
 
@@ -26,9 +27,10 @@ public class IndexServlet extends HttpServlet {
 		voorstellingRepository.setDataSource(dataSource);
 	}	
 	
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setAttribute("genres", genreRepository.toonAlleGenres());
-		if(request.getParameter("genreId") != null) {
+		if(StringUtils.isNotEmpty(request.getParameter("genreId")) && StringUtils.isLong(request.getParameter("genreId"))) {
 			request.setAttribute("voorstellingen", 
 				voorstellingRepository.toonAlleVoorGenre(Long.parseLong(request.getParameter("genreId"))));
 		}
