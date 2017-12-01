@@ -69,7 +69,10 @@ public class BevestigingreservatieServlet extends HttpServlet {
 			else {
 				fouten.put("gebruikersnaam", "Gebruikersnaam moet ingevuld zijn.");
 			}
-			response.sendRedirect(request.getRequestURI());
+			if (!fouten.isEmpty()) {
+				request.setAttribute("fouten", fouten);
+			}
+			request.getRequestDispatcher(VIEW).forward(request,response);
 		}
 		
 		if(request.getParameter("nieuw") != null) {
@@ -98,7 +101,7 @@ public class BevestigingreservatieServlet extends HttpServlet {
 					Set<Reservatie> reservaties = new LinkedHashSet<>();					
 					gelukt.entrySet().stream().forEach(entry -> {
 						reservaties.add(new Reservatie(1L, klantId, entry.getKey(), entry.getValue()));
-						parameterBuilder.append("geluktId="+entry.getKey()+","+"geluktPlaats="+entry.getValue()+",");
+						parameterBuilder.append("geluktId="+entry.getKey()+"&"+"geluktPlaats="+entry.getValue()+"&");
 					});
 					reservatieRepository.reservatiesToevoegen(reservaties);
 //					voorstellingRepository.selectByIds(gelukt.keySet()).stream().forEach(voorstelling ->
@@ -106,11 +109,12 @@ public class BevestigingreservatieServlet extends HttpServlet {
 				}
 				if(!mislukt.isEmpty()) {
 					mislukt.entrySet().stream().forEach(entry ->
-						parameterBuilder.append("misluktId="+entry.getKey()+","+"misluktPlaats="+entry.getValue()+","));
+						parameterBuilder.append("misluktId="+entry.getKey()+"&"+"misluktPlaats="+entry.getValue()+"&"));
 //					voorstellingRepository.selectByIds(mislukt.keySet()).stream().forEach(voorstelling ->
 //					mislukteReserveringen.put(voorstelling, mislukt.get(voorstelling.getId())));
 				}
 				session.removeAttribute("reservatiemandje");
+				session.removeAttribute("klantId");
 			}
 			parameterBuilder.deleteCharAt(parameterBuilder.length()-1);
 			response.sendRedirect(request.getContextPath()+REDIRECT_URL_OVERZICHT+parameterBuilder.toString());

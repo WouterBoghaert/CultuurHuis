@@ -132,3 +132,7 @@ table tr:nth-child(odd) {
 td, th {
 	margin: 0.1em;
 }
+
+.getal {
+	text-align: right;
+}

@@ -37,25 +37,31 @@ public class OverzichtServlet extends HttpServlet {
 		Map<Long,Integer> gelukt = new LinkedHashMap<>();
 		Map<Long,Integer> mislukt = new LinkedHashMap<>();
 		
-		for (int i=0; i<geluktIds.length; i++) {
-			if(StringUtils.isLong(geluktIds[i]) && StringUtils.isInt(geluktPlaatsen[i])) {
-				gelukt.put(Long.parseLong(geluktIds[i]), Integer.parseInt(geluktPlaatsen[i]));
+		if (geluktIds != null && geluktPlaatsen != null) {
+			for (int i=0; i<geluktIds.length; i++) {
+				if(StringUtils.isLong(geluktIds[i]) && StringUtils.isInt(geluktPlaatsen[i])) {
+					gelukt.put(Long.parseLong(geluktIds[i]), Integer.parseInt(geluktPlaatsen[i]));
+				}
+			}
+			
+			if(!gelukt.isEmpty()) {
+				voorstellingRepository.selectByIds(gelukt.keySet()).stream().forEach(voorstelling ->
+					gelukteReserveringen.put(voorstelling, gelukt.get(voorstelling.getId())));
 			}
 		}
 		
-		for (int i=0; i<misluktIds.length; i++) {
-			if(StringUtils.isLong(misluktIds[i]) && StringUtils.isInt(misluktPlaatsen[i])) {
-				mislukt.put(Long.parseLong(misluktIds[i]), Integer.parseInt(misluktPlaatsen[i]));
+		if (misluktIds != null && misluktPlaatsen != null) {
+			for (int i=0; i<misluktIds.length; i++) {
+				if(StringUtils.isLong(misluktIds[i]) && StringUtils.isInt(misluktPlaatsen[i])) {
+					mislukt.put(Long.parseLong(misluktIds[i]), Integer.parseInt(misluktPlaatsen[i]));
+				}
 			}
-		}
-		
-		if(!gelukt.isEmpty()) {
-			voorstellingRepository.selectByIds(gelukt.keySet()).stream().forEach(voorstelling ->
-				gelukteReserveringen.put(voorstelling, gelukt.get(voorstelling.getId())));
-		}
-		if(!mislukt.isEmpty()) {
-			voorstellingRepository.selectByIds(mislukt.keySet()).stream().forEach(voorstelling ->
-			mislukteReserveringen.put(voorstelling, mislukt.get(voorstelling.getId())));
+			
+			
+			if(!mislukt.isEmpty()) {
+				voorstellingRepository.selectByIds(mislukt.keySet()).stream().forEach(voorstelling ->
+				mislukteReserveringen.put(voorstelling, mislukt.get(voorstelling.getId())));
+			}
 		}
 		request.setAttribute("gelukteReserveringen", gelukteReserveringen);
 		request.setAttribute("mislukteReserveringen", mislukteReserveringen);

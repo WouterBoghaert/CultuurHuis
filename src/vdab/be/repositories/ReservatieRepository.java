@@ -59,9 +59,11 @@ public class ReservatieRepository extends AbstractRepository {
 			statement.executeUpdate();
 			try(ResultSet resultSet = statement.getGeneratedKeys()) {
 				index = 0;
-				Reservatie [] reservatieArray = (Reservatie[]) reservaties.toArray();
-				while(resultSet.next()) {
-					reservatieArray[++index].setId((long)(resultSet.getInt("id")));
+				Reservatie [] reservatieArray = new Reservatie [reservaties.size()];
+				for(Reservatie reservatie: reservaties) {
+					resultSet.next();
+					reservatie.setId((long)(resultSet.getInt(1)));
+					reservatieArray[index++] = reservatie;
 				}
 			}
 			connection.commit();

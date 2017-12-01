@@ -47,8 +47,8 @@
 				<td><fmt:formatDate value="${datum}" type="both" dateStyle="short" timeStyle="short" pattern="dd/MM/yy HH:mm"/></td>
 				<td>${voorstelling.titel}</td>
 				<td>${voorstelling.uitvoerders}</td>
-				<td>&euro;<fmt:formatNumber value="${voorstelling.prijs}" minFractionDigits="2" maxFractionDigits="2"/></td>
-				<td>${voorstelling.aantalVrijePlaatsen}</td>
+				<td class="getal">&euro;<fmt:formatNumber value="${voorstelling.prijs}" minFractionDigits="2" maxFractionDigits="2"/></td>
+				<td class="getal">${voorstelling.aantalVrijePlaatsen}</td>
 				<td><c:if test="${voorstelling.aantalVrijePlaatsen > 0}">
 						<c:url value="/reserveren.htm" var="reserverenURL">
 							<c:param name="voorstellingId" value="${voorstelling.id}"/>

@@ -31,8 +31,8 @@
 					<td><fmt:formatDate value="${datum}" type="both" dateStyle="short" timeStyle="short" pattern="dd/MM/yy HH:mm"/></td>
 					<td>${voorstelling.titel}</td>
 					<td>${voorstelling.uitvoerders}</td>
-					<td>&euro;<fmt:formatNumber value="${voorstelling.prijs}" minFractionDigits="2" maxFractionDigits="2"/></td>
-					<td>${reservatiemandje[voorstelling.id]}</td>
+					<td class="getal">&euro;<fmt:formatNumber value="${voorstelling.prijs}" minFractionDigits="2" maxFractionDigits="2"/></td>
+					<td class="getal">${reservatiemandje[voorstelling.id]}</td>
 					<td><input type="checkbox" name="verwijderen" value="${voorstelling.id}"></td>
 				</tr>
 				<c:if test="${status.last}">
