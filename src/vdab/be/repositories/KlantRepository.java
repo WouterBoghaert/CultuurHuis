@@ -105,7 +105,7 @@ public class KlantRepository extends AbstractRepository {
 					statementInsert.executeUpdate();
 					try(ResultSet resultSetInsert = statementInsert.getGeneratedKeys()) {
 						resultSetInsert.next();
-						klant.setId((long)(resultSetInsert.getInt("id")));
+						klant.setId((long)(resultSetInsert.getInt(1)));
 					}
 				}
 			}

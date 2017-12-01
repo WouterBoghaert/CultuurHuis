@@ -26,7 +26,8 @@ public class OverzichtServlet extends HttpServlet {
 	void setDataSource(DataSource dataSource) {
 		voorstellingRepository.setDataSource(dataSource);
 	}
-     
+    
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String [] geluktIds = request.getParameterValues("geluktId");
 		String [] geluktPlaatsen = request.getParameterValues("geluktPlaats");

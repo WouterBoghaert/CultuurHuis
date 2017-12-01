@@ -43,7 +43,14 @@ public class BevestigingreservatieServlet extends HttpServlet {
     
     @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher(VIEW).forward(request, response);
+		HttpSession session = request.getSession();
+		if(session.getAttribute("klantId") != null) {
+			Klant klant = klantRepository.getKlantById((long)session.getAttribute("klantId")).orElse(null);
+			if(klant != null) {
+				request.setAttribute("klant", klant);
+			}
+		}
+    	request.getRequestDispatcher(VIEW).forward(request, response);
 	}
 
 	@Override
