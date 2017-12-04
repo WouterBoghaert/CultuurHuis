@@ -89,7 +89,10 @@ public class Reservatie implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + aantalPlaatsen;
 		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + (int) (klantId ^ (klantId >>> 32));
+		result = prime * result + (int) (voorstellingId ^ (voorstellingId >>> 32));
 		return result;
 	}
 
@@ -102,8 +105,16 @@ public class Reservatie implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Reservatie other = (Reservatie) obj;
+		if (aantalPlaatsen != other.aantalPlaatsen)
+			return false;
 		if (id != other.id)
 			return false;
+		if (klantId != other.klantId)
+			return false;
+		if (voorstellingId != other.voorstellingId)
+			return false;
 		return true;
-	}	
+	}
+
+	
 }

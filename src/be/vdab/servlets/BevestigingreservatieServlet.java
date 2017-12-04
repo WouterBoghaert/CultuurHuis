@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -58,19 +57,29 @@ public class BevestigingreservatieServlet extends HttpServlet {
 		if(request.getParameter("zoek") != null) {
 			Map<String,String> fouten = new HashMap<>();
 			if(StringUtils.isNotEmpty(request.getParameter("gebruikersnaam"))) {
-				if(StringUtils.isNotEmpty(request.getParameter("paswoord"))) {
-					Klant klant = klantRepository.getKlantByGebruikersnaam(request.getParameter("gebruikersnaam")).orElse(null);
-					if (klant != null && klant.getPaswoord().equals(request.getParameter("paswoord"))) {
-						HttpSession session = request.getSession();
-						session.setAttribute("klantId", klant.getId());
-						request.setAttribute("klant", klant);												
+				if(StringUtils.isNoScript(request.getParameter("gebruikersnaam"))) {
+					if(StringUtils.isNotEmpty(request.getParameter("paswoord"))) {
+						if(StringUtils.isNoScript(request.getParameter("paswoord"))) {
+							Klant klant = klantRepository.getKlantByGebruikersnaam(request.getParameter("gebruikersnaam")).orElse(null);
+							if (klant != null && klant.getPaswoord().equals(request.getParameter("paswoord"))) {
+								HttpSession session = request.getSession();
+								session.setAttribute("klantId", klant.getId());
+								request.setAttribute("klant", klant);												
+							}
+							else {
+								fouten.put("zoek", "Verkeerde gebruikersnaam of paswoord.");
+							}
+						}
+						else {
+							fouten.put("paswoord", "Je mag hier geen script invullen");
+						}
 					}
 					else {
-						fouten.put("zoek", "Verkeerde gebruikersnaam of paswoord.");
+						fouten.put("paswoord", "Paswoord moet ingevuld zijn.");
 					}
 				}
 				else {
-					fouten.put("paswoord", "Paswoord moet ingevuld zijn.");
+					fouten.put("gebruikersnaam", "Je mag hier geen script invullen.");
 				}
 			}
 			else {
@@ -96,30 +105,48 @@ public class BevestigingreservatieServlet extends HttpServlet {
 				long klantId = (long) session.getAttribute("klantId");
 				Map<Long,Integer> gelukt = new LinkedHashMap<>();
 				Map<Long,Integer> mislukt = new LinkedHashMap<>();
-				for(Entry<Long,Integer> entry:reservatiemandje.entrySet()) {
-					if(voorstellingRepository.vrijePlaatsenVerminderen(entry.getKey(), entry.getValue())) {
-						gelukt.put(entry.getKey(), entry.getValue());
-					}
-					else {
-						mislukt.put(entry.getKey(), entry.getValue());
-					}
-				}
+				Set<Reservatie> reservaties = new LinkedHashSet<>();
+				reservatiemandje.entrySet().stream().forEach(entry -> 
+					reservaties.add(new Reservatie(1L, klantId, entry.getKey(), entry.getValue())));
+				Map<String,Map<Long,Integer>> geluktMislukt = reservatieRepository.reservatiesToevoegen(reservaties);
+				gelukt = geluktMislukt.get("gelukt");
+				mislukt = geluktMislukt.get("mislukt");
+				
 				if(!gelukt.isEmpty()) {
-					Set<Reservatie> reservaties = new LinkedHashSet<>();					
-					gelukt.entrySet().stream().forEach(entry -> {
-						reservaties.add(new Reservatie(1L, klantId, entry.getKey(), entry.getValue()));
-						parameterBuilder.append("geluktId="+entry.getKey()+"&"+"geluktPlaats="+entry.getValue()+"&");
-					});
-					reservatieRepository.reservatiesToevoegen(reservaties);
-//					voorstellingRepository.selectByIds(gelukt.keySet()).stream().forEach(voorstelling ->
-//						gelukteReserveringen.put(voorstelling, gelukt.get(voorstelling.getId())));
+					gelukt.entrySet().stream().forEach(entry -> 
+						parameterBuilder.append("geluktId="+entry.getKey()+"&"+"geluktPlaats="+entry.getValue()+"&"));
 				}
+				
 				if(!mislukt.isEmpty()) {
-					mislukt.entrySet().stream().forEach(entry ->
-						parameterBuilder.append("misluktId="+entry.getKey()+"&"+"misluktPlaats="+entry.getValue()+"&"));
-//					voorstellingRepository.selectByIds(mislukt.keySet()).stream().forEach(voorstelling ->
-//					mislukteReserveringen.put(voorstelling, mislukt.get(voorstelling.getId())));
+					if(!mislukt.isEmpty()) {
+						mislukt.entrySet().stream().forEach(entry ->
+							parameterBuilder.append("misluktId="+entry.getKey()+"&"+"misluktPlaats="+entry.getValue()+"&"));
 				}
+				
+//				for(Entry<Long,Integer> entry:reservatiemandje.entrySet()) {
+//					if(voorstellingRepository.vrijePlaatsenVerminderen(entry.getKey(), entry.getValue())) {
+//						gelukt.put(entry.getKey(), entry.getValue());
+//					}
+//					else {
+//						mislukt.put(entry.getKey(), entry.getValue());
+//					}
+//				}
+//				if(!gelukt.isEmpty()) {
+//					Set<Reservatie> reservaties = new LinkedHashSet<>();					
+//					gelukt.entrySet().stream().forEach(entry -> {
+//						reservaties.add(new Reservatie(1L, klantId, entry.getKey(), entry.getValue()));
+//						parameterBuilder.append("geluktId="+entry.getKey()+"&"+"geluktPlaats="+entry.getValue()+"&");
+//					});
+//					reservatieRepository.reservatiesToevoegen(reservaties);
+////					voorstellingRepository.selectByIds(gelukt.keySet()).stream().forEach(voorstelling ->
+////						gelukteReserveringen.put(voorstelling, gelukt.get(voorstelling.getId())));
+//				}
+//				if(!mislukt.isEmpty()) {
+//					mislukt.entrySet().stream().forEach(entry ->
+//						parameterBuilder.append("misluktId="+entry.getKey()+"&"+"misluktPlaats="+entry.getValue()+"&"));
+////					voorstellingRepository.selectByIds(mislukt.keySet()).stream().forEach(voorstelling ->
+////					mislukteReserveringen.put(voorstelling, mislukt.get(voorstelling.getId())));
+//				}
 				session.removeAttribute("reservatiemandje");
 				session.removeAttribute("klantId");
 			}
@@ -127,5 +154,6 @@ public class BevestigingreservatieServlet extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+REDIRECT_URL_OVERZICHT+parameterBuilder.toString());
 		}
 	}
+}
 
 }

@@ -39,49 +39,84 @@ public class NieuweklantServlet extends HttpServlet {
 		Map<String,String> fouten = new LinkedHashMap<>();
 		Klant.KlantBuilder klantBuilder = new Klant.KlantBuilder();
 		if(StringUtils.isNotEmpty(request.getParameter("voornaam"))) {
-			klantBuilder.metVoornaam(request.getParameter("voornaam"));
+			if(StringUtils.isNoScript(request.getParameter("voornaam"))) {
+				klantBuilder.metVoornaam(request.getParameter("voornaam"));
+			}
+			else {
+				fouten.put("voornaam", "Je mag hier geen script invullen.");
+			}
 		}
 		else {
 			fouten.put("voornaam", "Voornaam niet ingevuld.");
 		}
 		
 		if(StringUtils.isNotEmpty(request.getParameter("familienaam"))) {
-			klantBuilder.metFamilienaam(request.getParameter("familienaam"));
+			if(StringUtils.isNoScript(request.getParameter("familienaam"))) {
+				klantBuilder.metFamilienaam(request.getParameter("familienaam"));
+			}
+			else {
+				fouten.put("familienaam", "Je mag hier geen script invullen.");
+			}
 		}
 		else {
 			fouten.put("familienaam", "Familienaam niet ingevuld.");
 		}
 		
 		if(StringUtils.isNotEmpty(request.getParameter("straat"))) {
-			klantBuilder.metStraat(request.getParameter("straat"));
+			if(StringUtils.isNoScript(request.getParameter("straat"))) {
+				klantBuilder.metStraat(request.getParameter("straat"));
+			}
+			else {
+				fouten.put("straat", "Je mag hier geen script invullen.");
+			}
 		}
 		else {
 			fouten.put("straat", "Straat niet ingevuld.");
 		}
 		
 		if(StringUtils.isNotEmpty(request.getParameter("huisnr"))) {
-			klantBuilder.metHuisnr(request.getParameter("huisnr"));
+			if(StringUtils.isNoScript(request.getParameter("huisnr"))) {	
+				klantBuilder.metHuisnr(request.getParameter("huisnr"));
+			}
+			else {
+				fouten.put("huisnr", "Je mag hier geen script invullen.");
+			}
 		}
 		else {
 			fouten.put("huisnr", "Huisnummer niet ingevuld.");
 		}
 		
 		if(StringUtils.isNotEmpty(request.getParameter("postcode"))) {
-			klantBuilder.metPostcode(request.getParameter("postcode"));
+			if(StringUtils.isNoScript(request.getParameter("postcode"))) {
+				klantBuilder.metPostcode(request.getParameter("postcode"));
+			}
+			else {
+				fouten.put("postcode", "Je mag hier geen script invullen.");
+			}
 		}
 		else {
 			fouten.put("postcode", "Postcode niet ingevuld.");
 		}
 		
 		if(StringUtils.isNotEmpty(request.getParameter("gemeente"))) {
-			klantBuilder.metGemeente(request.getParameter("gemeente"));
+			if(StringUtils.isNoScript(request.getParameter("gemeente"))) {
+				klantBuilder.metGemeente(request.getParameter("gemeente"));
+			}			
+			else {
+				fouten.put("gemeente", "Je mag hier geen script invullen.");
+			}
 		}
 		else {
 			fouten.put("gemeente", "Gemeente niet ingevuld.");
 		}
 		
 		if(StringUtils.isNotEmpty(request.getParameter("gebruikersnaam"))) {
-			klantBuilder.metGebruikersnaam(request.getParameter("gebruikersnaam"));
+			if(StringUtils.isNoScript(request.getParameter("gebruikersnaam"))) {
+				klantBuilder.metGebruikersnaam(request.getParameter("gebruikersnaam"));
+			}
+			else {
+				fouten.put("gebruikersnaam", "Je mag hier geen script invullen.");
+			}
 		}
 		else {
 			fouten.put("gebruikersnaam", "Gebruikersnaam niet ingevuld.");
@@ -91,13 +126,23 @@ public class NieuweklantServlet extends HttpServlet {
 			fouten.put("paswoord", "Paswoord niet ingevuld.");
 		}
 		if(StringUtils.isNotEmpty(request.getParameter("herhaalpaswoord"))) {
-			if(StringUtils.isNotEmpty(request.getParameter("paswoord"))) {
-				if(request.getParameter("paswoord").equals(request.getParameter("herhaalpaswoord"))) {
-					klantBuilder.metPaswoord(request.getParameter("paswoord"));
+			if(StringUtils.isNoScript(request.getParameter("herhaalpaswoord"))) {
+				if(StringUtils.isNotEmpty(request.getParameter("paswoord"))) {
+					if(request.getParameter("paswoord").equals(request.getParameter("herhaalpaswoord"))) {
+						if(StringUtils.isNoScript(request.getParameter("paswoord"))) {
+							klantBuilder.metPaswoord(request.getParameter("paswoord"));
+						}
+						else {
+							fouten.put("paswoord", "Je mag hier geen script invullen.");
+						}
+					}
+					else {
+						fouten.put("herhaalpaswoord", "Herhaal paswoord is verschillend van paswoord.");
+					}
 				}
-				else {
-					fouten.put("herhaalpaswoord", "Herhaal paswoord is verschillend van paswoord.");
-				}
+			}
+			else {
+				fouten.put("herhaalpaswoord", "Je mag hier geen script invullen.");
 			}
 		}
 		else {

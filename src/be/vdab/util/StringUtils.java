@@ -37,5 +37,8 @@ public class StringUtils {
 		return string != null && !string.trim().isEmpty();
 	}
 	
+	public static boolean isNoScript(String string) {
+		return !string.contains("<script>");
+	}
 	
 }

@@ -30,7 +30,7 @@
 		</c:url>
 		<form method = "post" name="reserveerForm" id="reserveerForm" action="${actionURL}">
 			<label for="plaatsen">Plaatsen:<span>${fout}</span></label>
- 			<input type="number" min="1" max="${voorstelling.aantalVrijePlaatsen}" name="plaatsen" id="plaatsen" value="${reservatiemandje[voorstelling.id]}" required>
+ 			<input type="number" min="1" max="${voorstelling.aantalVrijePlaatsen}" name="plaatsen" id="plaatsen" value="${reservatiemandje[voorstelling.id]}" required autofocus>
 			<input type="submit" value="Reserveren" name="reserveerKnop" id="reserveerKnop">
 		</form>
 	</div>

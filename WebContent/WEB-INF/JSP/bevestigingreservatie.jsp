@@ -33,8 +33,8 @@
 		</form>	
 		<c:choose>
 			<c:when test="${empty fouten}">
-<%-- 				${klant.voornaam} ${klant.familienaam} ${klant.straat} ${klant.huisnr} ${klant.postcode} ${klant.gemeente} --%>
-				<b>${klant}</b>
+ 				<c:out value='${klant.voornaam}'/> ${klant.familienaam} ${klant.straat} ${klant.huisnr} ${klant.postcode} ${klant.gemeente}
+				<%--<b>${klant}</b> --%>
 			</c:when>
 			<c:otherwise>
 				${fouten.zoek}
