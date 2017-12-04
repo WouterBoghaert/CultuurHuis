@@ -1,7 +1,7 @@
 package be.vdab.servlets;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -36,7 +36,7 @@ public class NieuweklantServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Map<String,String> fouten = new HashMap<>();
+		Map<String,String> fouten = new LinkedHashMap<>();
 		Klant.KlantBuilder klantBuilder = new Klant.KlantBuilder();
 		if(StringUtils.isNotEmpty(request.getParameter("voornaam"))) {
 			klantBuilder.metVoornaam(request.getParameter("voornaam"));
@@ -87,22 +87,21 @@ public class NieuweklantServlet extends HttpServlet {
 			fouten.put("gebruikersnaam", "Gebruikersnaam niet ingevuld.");
 		}
 		
-		if(StringUtils.isNotEmpty(request.getParameter("paswoord"))) {
-			if(StringUtils.isNotEmpty(request.getParameter("herhaalpaswoord"))) {
-				String paswoord = request.getParameter("paswoord");
-				if(paswoord.equals(request.getAttribute("herhaalpaswoord"))) {
-					klantBuilder.metPaswoord(paswoord);
+		if(!StringUtils.isNotEmpty(request.getParameter("paswoord"))) {
+			fouten.put("paswoord", "Paswoord niet ingevuld.");
+		}
+		if(StringUtils.isNotEmpty(request.getParameter("herhaalpaswoord"))) {
+			if(StringUtils.isNotEmpty(request.getParameter("paswoord"))) {
+				if(request.getParameter("paswoord").equals(request.getParameter("herhaalpaswoord"))) {
+					klantBuilder.metPaswoord(request.getParameter("paswoord"));
 				}
 				else {
 					fouten.put("herhaalpaswoord", "Herhaal paswoord is verschillend van paswoord.");
 				}
 			}
-			else {
-				fouten.put("herhaalpaswoord", "Herhaal paswoord niet ingevuld");
-			}
 		}
 		else {
-			fouten.put("paswoord", "Paswoord niet ingevuld.");
+			fouten.put("herhaalpaswoord", "Herhaal paswoord niet ingevuld");
 		}
 		if(fouten.isEmpty()) {
 			klantBuilder.metId(1L);

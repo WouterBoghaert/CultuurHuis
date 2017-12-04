@@ -23,9 +23,9 @@
 		<form method="post" action="${zoekURL}" id="zoekForm">
 			<h3>Stap 1: Wie ben je?</h3>
 			<label for="gebruikersnaam">Gebruikersnaam:<span>${fouten.gebruikersnaam}</span></label>
-			<input type="text" name="gebruikersnaam" required autofocus value="${param.gebruikersnaam}" ${zoekDisabled}>
+			<input type="text" name="gebruikersnaam" required autofocus maxlength = "50" value="${param.gebruikersnaam}" ${zoekDisabled}>
 			<label for="paswoord">Paswoord:<span>${fouten.paswoord}</span></label>
-			<input type="password" name="paswoord" ${zoekDisabled} required>
+			<input type="password" name="paswoord" ${zoekDisabled} maxlength = "50" required>
 			<input type="submit" name="zoek" value="Zoek me op" ${zoekDisabled}>
 		</form>
 		<form method="post" action="${nieuwURL}" id="nieuwForm">	
