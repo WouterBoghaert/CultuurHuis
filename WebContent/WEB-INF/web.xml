@@ -17,4 +17,8 @@
   	<exception-type>be.vdab.repositories.RepositoryException</exception-type>
   	<location>/WEB-INF/JSP/repositoryexception.jsp</location>
   </error-page>
+  <session-config>
+  	<session-timeout>20</session-timeout>
+  	<tracking-mode>COOKIE</tracking-mode>
+  </session-config>
 </web-app>

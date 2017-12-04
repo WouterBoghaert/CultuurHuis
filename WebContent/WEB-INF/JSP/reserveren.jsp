@@ -36,8 +36,11 @@
 	</div>
 	<script>
 		document.getElementById("reserveerForm").addEventListener("submit", function(){
-			document.getElementById("reserveerKnop").disabled;
-			document.getElementById("plaatsen").disabled;
+			if(!navigator.cookieEnabled) {
+				alert("Dit werkt enkel als cookies aanstaan!");
+				return false;
+			}
+			document.getElementById("reserveerKnop").disabled = true;
 		});
 	</script>
 </body>

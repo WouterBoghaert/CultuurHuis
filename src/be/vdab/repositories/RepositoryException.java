@@ -1,4 +1,4 @@
-package vdab.be.repositories;
+package be.vdab.repositories;
 
 public class RepositoryException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

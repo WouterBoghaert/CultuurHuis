@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import be.vdab.entities.Voorstelling;
+import be.vdab.repositories.VoorstellingRepository;
 import be.vdab.util.StringUtils;
-import vdab.be.repositories.VoorstellingRepository;
 
 @WebServlet("/overzicht.htm")
 public class OverzichtServlet extends HttpServlet {

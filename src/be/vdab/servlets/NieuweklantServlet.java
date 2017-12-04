@@ -14,8 +14,8 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import be.vdab.entities.Klant;
+import be.vdab.repositories.KlantRepository;
 import be.vdab.util.StringUtils;
-import vdab.be.repositories.KlantRepository;
 
 @WebServlet("/nieuweklant.htm")
 public class NieuweklantServlet extends HttpServlet {

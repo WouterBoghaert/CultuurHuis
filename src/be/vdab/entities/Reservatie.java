@@ -105,7 +105,5 @@ public class Reservatie implements Serializable {
 		if (id != other.id)
 			return false;
 		return true;
-	}
-	
-	
+	}	
 }

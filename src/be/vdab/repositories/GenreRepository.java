@@ -1,4 +1,4 @@
-package vdab.be.repositories;
+package be.vdab.repositories;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

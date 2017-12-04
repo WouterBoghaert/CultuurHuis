@@ -1,4 +1,4 @@
-package vdab.be.repositories;
+package be.vdab.repositories;
 
 import javax.sql.DataSource;
 

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
-import vdab.be.repositories.VoorstellingRepository;
+import be.vdab.repositories.VoorstellingRepository;
 
 @WebServlet("/reservatiemandje.htm")
 public class ReservatiemandjeServlet extends HttpServlet {

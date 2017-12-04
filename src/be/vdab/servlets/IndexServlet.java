@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import be.vdab.repositories.GenreRepository;
+import be.vdab.repositories.VoorstellingRepository;
 import be.vdab.util.StringUtils;
-import vdab.be.repositories.GenreRepository;
-import vdab.be.repositories.VoorstellingRepository;
 
 @WebServlet("/index.htm")
 public class IndexServlet extends HttpServlet {

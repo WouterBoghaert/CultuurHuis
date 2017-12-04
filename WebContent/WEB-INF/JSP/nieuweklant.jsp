@@ -41,7 +41,10 @@
 		</c:if>		
 		<script type="text/javascript">
 			document.getElementById("nieuweKlantForm").addEventHandler("submit", function(){
-				document.getElementById("bevestigKnop").disabled;
+				if(!navigator.cookieEnabled) {
+					alert("Dit werkt enkel als cookies aanstaan!");
+				}
+				document.getElementById("bevestigKnop").disabled = true;
 			});
 		</script>
 	</body>

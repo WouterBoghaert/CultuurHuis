@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import be.vdab.repositories.VoorstellingRepository;
 import be.vdab.util.StringUtils;
-import vdab.be.repositories.VoorstellingRepository;
 
 @WebServlet("/reserveren.htm")
 public class ReserveerServlet extends HttpServlet {
@@ -55,22 +55,18 @@ public class ReserveerServlet extends HttpServlet {
 					reservatiemandje.put(Long.parseLong(request.getParameter("voorstellingId")),Integer.parseInt(request.getParameter("plaatsen")));
 					session.setAttribute("reservatiemandje", reservatiemandje);
 					response.sendRedirect(request.getContextPath() + REDIRECT_URL);
+					return;
 				}
 				else {
 					String fout = "Tik een getal tussen 1 en " + request.getParameter("vrijePlaatsen");
 					request.setAttribute("fout", fout);
-					request.setAttribute("voorstelling", voorstellingRepository.selectById(Long.parseLong(request.getParameter("voorstellingId"))).orElse(null));
-					request.getRequestDispatcher(VIEW).forward(request,response);
 				}
 			}
 		}
 		else {
-			request.setAttribute("voorstelling", voorstellingRepository.selectById(Long.parseLong(request.getParameter("voorstellingId"))).orElse(null));
 			request.setAttribute("fout", "Plaatsen moet correct ingevuld zijn!");
-			request.getRequestDispatcher(VIEW).forward(request,response);
 		}
+		request.setAttribute("voorstelling", voorstellingRepository.selectById(Long.parseLong(request.getParameter("voorstellingId"))).orElse(null));
+		request.getRequestDispatcher(VIEW).forward(request,response);
 	}
 }
-
-// dopost misschien nog wat mooier schrijven, indien mogelijk
-// checken of response.sendRedirect(request.getRequestURI()); ipv dispatcher niet werkt

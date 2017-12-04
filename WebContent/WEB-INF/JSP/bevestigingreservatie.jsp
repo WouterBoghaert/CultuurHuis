@@ -34,7 +34,7 @@
 		<c:choose>
 			<c:when test="${empty fouten}">
 <%-- 				${klant.voornaam} ${klant.familienaam} ${klant.straat} ${klant.huisnr} ${klant.postcode} ${klant.gemeente} --%>
-				${klant}
+				<b>${klant}</b>
 			</c:when>
 			<c:otherwise>
 				${fouten.zoek}
@@ -46,15 +46,21 @@
 		</form>
 		<script>
  			document.getElementById("zoekForm").addEventListener("submit", function(){ 
-				document.getElementById("zoekKnop").disabled; 
+ 				if(!navigator.cookieEnabled) {
+					alert("Dit werkt enkel als cookies aanstaan");
+				}
+ 				document.getElementById("zoekKnop").disabled = true; 
 			}); 
 			
 			document.getElementById("nieuwForm").addEventListener("submit", function(){ 
-				document.getElementById("nieuwKnop").disabled; 
+				document.getElementById("nieuwKnop").disabled = true; 
 			}); 
 			
 			document.getElementById("bevestigenForm").addEventListener("submit", function(){ 
-				document.getElementById("bevestigenKnop").disabled; 
+				if(!navigator.cookieEnabled) {
+					alert("Dit werkt enkel als cookies aanstaan");
+				}
+				document.getElementById("bevestigenKnop").disabled = true; 
  			}); 
 		</script> 
 	</body>

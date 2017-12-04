@@ -19,10 +19,10 @@ import javax.sql.DataSource;
 
 import be.vdab.entities.Klant;
 import be.vdab.entities.Reservatie;
+import be.vdab.repositories.KlantRepository;
+import be.vdab.repositories.ReservatieRepository;
+import be.vdab.repositories.VoorstellingRepository;
 import be.vdab.util.StringUtils;
-import vdab.be.repositories.KlantRepository;
-import vdab.be.repositories.ReservatieRepository;
-import vdab.be.repositories.VoorstellingRepository;
 
 @WebServlet("/bevestigingreservatie.htm")
 public class BevestigingreservatieServlet extends HttpServlet {
@@ -129,5 +129,3 @@ public class BevestigingreservatieServlet extends HttpServlet {
 	}
 
 }
-// checken voor redirects. Disabelen knoppen enz via JSP, checken op session of klant
-// knop bevestigen doorlinken naar juiste pagina via servlet
