@@ -6,12 +6,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import be.vdab.entities.Genre;
 
 public class GenreRepository extends AbstractRepository {
 	private static final String SELECT_ALL =
 		"select id, naam from genres order by naam";
+	private static final Logger LOGGER = 
+		Logger.getLogger(GenreRepository.class.getName());
 	
 	public Set<Genre> toonAlleGenres() {
 		try(Connection connection = dataSource.getConnection();
@@ -28,6 +32,7 @@ public class GenreRepository extends AbstractRepository {
 			return genres;
 		}
 		catch(SQLException ex) {
+			LOGGER.log(Level.SEVERE, "Probleem met database cultuurhuis", ex);
 			throw new RepositoryException(ex);
 		}
 	}

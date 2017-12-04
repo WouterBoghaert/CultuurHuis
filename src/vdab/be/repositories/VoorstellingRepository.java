@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import be.vdab.entities.Genre;
 import be.vdab.entities.Voorstelling;
@@ -28,6 +30,8 @@ public class VoorstellingRepository extends AbstractRepository {
 	private static final String VRIJEPLAATSEN_VERMINDEREN = 
 		"update voorstellingen set vrijeplaatsen = vrijeplaatsen - ? "
 		+ "where id = ?";
+	private static final Logger LOGGER = 
+		Logger.getLogger(VoorstellingRepository.class.getName());
 	
 	private Voorstelling resultSetNaarVoorstelling(ResultSet resultSet) throws SQLException {
 		return new Voorstelling.VoorstellingBuilder()
@@ -57,6 +61,7 @@ public class VoorstellingRepository extends AbstractRepository {
 			return voorstellingen;
 		}
 		catch (SQLException ex) {
+			LOGGER.log(Level.SEVERE, "Probleem met database cultuurhuis", ex);
 			throw new RepositoryException(ex);
 		}
 	}
@@ -80,6 +85,7 @@ public class VoorstellingRepository extends AbstractRepository {
 			return voorstelling;
 		}
 		catch(SQLException ex) {
+			LOGGER.log(Level.SEVERE, "Probleem met database cultuurhuis", ex);
 			throw new RepositoryException(ex);
 		}
 	}
@@ -108,6 +114,7 @@ public class VoorstellingRepository extends AbstractRepository {
 			return voorstellingen;
 		}
 		catch(SQLException ex) {
+			LOGGER.log(Level.SEVERE, "Probleem met database cultuurhuis", ex);
 			throw new RepositoryException(ex);
 		}	
 	}
@@ -135,6 +142,7 @@ public class VoorstellingRepository extends AbstractRepository {
 			return true;
 		}
 		catch(SQLException ex) {
+			LOGGER.log(Level.SEVERE, "Probleem met database cultuurhuis", ex);
 			throw new RepositoryException(ex);
 		}
 	}

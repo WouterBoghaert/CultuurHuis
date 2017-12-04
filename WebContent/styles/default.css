@@ -136,3 +136,6 @@ td, th {
 .getal {
 	text-align: right;
 }
+div form {
+	margin-top: 1em;
+}

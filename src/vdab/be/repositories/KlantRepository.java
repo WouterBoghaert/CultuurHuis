@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import be.vdab.entities.Klant;
 
@@ -21,6 +23,8 @@ public class KlantRepository extends AbstractRepository {
 	private static final String KLANT_TOEVOEGEN = 
 		"insert into klanten (voornaam, familienaam, straat, huisnr, postcode, "
 		+ "gemeente, gebruikersnaam, paswoord) values (?,?,?,?,?,?,?,?)";
+	private static final Logger LOGGER =
+		Logger.getLogger(KlantRepository.class.getName());
 
 	private Klant resultSetRijNaarKlant(ResultSet resultSet) throws SQLException {
 		return new Klant.KlantBuilder().metId((long)(resultSet.getInt("id")))
@@ -54,6 +58,7 @@ public class KlantRepository extends AbstractRepository {
 			return klant;
 		}
 		catch(SQLException ex) {
+			LOGGER.log(Level.SEVERE, "Probleem met database cultuurhuis", ex);
 			throw new RepositoryException(ex);
 		}
 	}
@@ -77,6 +82,7 @@ public class KlantRepository extends AbstractRepository {
 			return klant;
 		}
 		catch(SQLException ex) {
+			LOGGER.log(Level.SEVERE, "Probleem met database cultuurhuis", ex);
 			throw new RepositoryException(ex);
 		}
 	}
@@ -113,6 +119,7 @@ public class KlantRepository extends AbstractRepository {
 			return true;		
 		}
 		catch(SQLException ex) {
+			LOGGER.log(Level.SEVERE, "Probleem met database cultuurhuis", ex);
 			throw new RepositoryException(ex);
 		}
 	}	

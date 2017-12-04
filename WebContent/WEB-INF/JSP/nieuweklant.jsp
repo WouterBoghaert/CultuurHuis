@@ -1,4 +1,4 @@
-<%@page contentType='text/html' pageEncoding='UTF-8' session='false'%>
+<%@page contentType='text/html' pageEncoding='UTF-8'%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="vdab" uri="http://vdab.be/tags" %>
 <!doctype html>
@@ -8,27 +8,30 @@
 	</head>
 	<body>
 		<h2>Het Cultuurhuis: nieuwe klant</h2><img src="<c:url value="/images/nieuweklant.png"/>" alt="Nieuwe klant" title="Nieuwe klant"/>
-		<form method="post" id="nieuweKlantForm">
-			<label for="voornaam">Voornaam:</label>
-			<input type="text" name="voornaam" value="${param.voornaam}" maxlength = "50" required autofocus>
-			<label for="familienaam">Familienaam:</label>
-			<input type="text" name="familienaam" value="${param.familienaam}" maxlength = "50" required> 
-		 	<label for="straat">Straat:</label>
-			<input type="text" name="straat" value="${param.straat}" maxlength = "50" required> 
-		 	<label for="huisnr">Huisnr:</label>
-			<input type="text" name="huisnr" value="${param.huisnr}" maxlength = "50" required>
-			<label for="postcode">Postcode:</label>
-			<input type="text" name="postcode" value="${param.postcode}" maxlength = "50" required> 
-			<label for="gemeente">Gemeente:</label>
-			<input type="text" name="gemeente" value="${param.gemeente}" maxlength = "50" required> 
-			<label for="gebruikersnaam">Gebruikersnaam:</label>
-			<input type="text" name="gebruikersnaam" value="${param.gebruikersnaam}" maxlength = "50" required>
-			<label for="paswoord">Paswoord:</label>
-			<input type="password" name="paswoord" maxlength = "50" required> 
-			<label for="herhaalpaswoord">Herhaal paswoord:</label>
-			<input type="password" name="herhaalpaswoord" maxlength = "50" required>
-			<input type="submit" name="bevestig" id="bevestigKnop" value="OK">			 
-		</form>
+		<div><vdab:menu/></div>
+		<div>
+			<form method="post" id="nieuweKlantForm">
+				<label for="voornaam">Voornaam:</label>
+				<input type="text" name="voornaam" value="${param.voornaam}" maxlength = "50" required autofocus>
+				<label for="familienaam">Familienaam:</label>
+				<input type="text" name="familienaam" value="${param.familienaam}" maxlength = "50" required> 
+			 	<label for="straat">Straat:</label>
+				<input type="text" name="straat" value="${param.straat}" maxlength = "50" required> 
+			 	<label for="huisnr">Huisnr:</label>
+				<input type="text" name="huisnr" value="${param.huisnr}" maxlength = "50" required>
+				<label for="postcode">Postcode:</label>
+				<input type="text" name="postcode" value="${param.postcode}" maxlength = "50" required> 
+				<label for="gemeente">Gemeente:</label>
+				<input type="text" name="gemeente" value="${param.gemeente}" maxlength = "50" required> 
+				<label for="gebruikersnaam">Gebruikersnaam:</label>
+				<input type="text" name="gebruikersnaam" value="${param.gebruikersnaam}" maxlength = "50" required>
+				<label for="paswoord">Paswoord:</label>
+				<input type="password" name="paswoord" maxlength = "50" required> 
+				<label for="herhaalpaswoord">Herhaal paswoord:</label>
+				<input type="password" name="herhaalpaswoord" maxlength = "50" required>
+				<input type="submit" name="bevestig" id="bevestigKnop" value="OK">			 
+			</form>
+		</div>
 		<c:if test="${not empty fouten}">
 			<ul>
 				<c:forEach var="foutEntry" items="${fouten}">

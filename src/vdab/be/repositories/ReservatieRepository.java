@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import be.vdab.entities.Reservatie;
 
@@ -17,6 +19,9 @@ public class ReservatieRepository extends AbstractRepository {
 	private static final String RESERVATIES_TOEVOEGEN =
 			"insert into reservaties(klantid, voorstellingsid, plaatsen) "
 			+ "values ";
+	
+	private static final Logger LOGGER =
+		Logger.getLogger(ReservatieRepository.class.getName());
 	
 //	public void reservatieToevoegen(Reservatie reservatie) {
 //		try(Connection connection = dataSource.getConnection();
@@ -69,6 +74,7 @@ public class ReservatieRepository extends AbstractRepository {
 			connection.commit();
 		}
 		catch(SQLException ex) {
+			LOGGER.log(Level.SEVERE, "Probleem met database cultuurhuis", ex);
 			throw new RepositoryException(ex);
 		}		
 	}			
